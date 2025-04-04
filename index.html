@@ -130,7 +130,7 @@
             .then(response => response.json())
             .then(data => {
                 const { browser, os } = getBrowserInfo();
-                const isVpn = data.security && data.security.vpn ? "Yes" : "VPN Detection Unavailable (Try Another VPN Provider)";
+                const isVpn = data.security && data.security.vpn ? "Yes" : "VPN Matters Not";
 
                 document.getElementById('info').innerHTML += `
                     <p><strong>IP Address:</strong> ${data.ip}</p>
