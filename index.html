@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker Terminal</title>
+    <style>
+        @keyframes glitch {
+            0% { text-shadow: 2px 2px 0 #00ff00, -2px -2px 0 #ff00ff; }
+            50% { text-shadow: -2px -2px 0 #00ff00, 2px 2px 0 #ff00ff; }
+            100% { text-shadow: 2px 2px 0 #00ff00, -2px -2px 0 #ff00ff; }
+        }
+        body {
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 50px;
+            background-color: black;
+            color: #00ff00;
+        }
+        #info {
+            background: black;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            text-align: left;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            font-size: 1.2em;
+        }
+        iframe {
+            width: 100%;
+            height: 300px;
+            border: none;
+            margin-top: 10px;
+            display: none;
+        }
+        .btn {
+            background: linear-gradient(45deg, red, darkred);
+            color: white;
+            padding: 20px 40px;
+            font-size: 2em;
+            border: 2px solid rgba(255, 0, 0, 0.8);
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 1);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+            animation: glitch 0.3s infinite alternate;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .btn:hover {
+            background: darkred;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 1);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <button class="btn" onclick="startSequence()">DO NOT PRESS</button>
+    <div id="info"></div>
+    <iframe id="map"></iframe>
+
+    <script>
+        function startSequence() {
+            document.querySelector('.btn').style.display = 'none';
+            document.body.style.backgroundColor = "black";
+            document.getElementById('info').style.display = 'block';
+            
+            let messages = [
+                "Accessing secure server...",
+                "Decrypting IP data...",
+                "Bypassing firewall...",
+                "Tracking location...",
+                "Extracting ISP details...",
+                "Identifying device...",
+                "Data acquired successfully."
+            ];
+
+            let infoDiv = document.getElementById('info');
+            infoDiv.innerHTML = "";
+            
+            let i = 0;
+            function typeMessage() {
+                if (i < messages.length) {
+                    let p = document.createElement('p');
+                    infoDiv.appendChild(p);
+                    let j = 0;
+                    let text = messages[i];
+                    function typeLetter() {
+                        if (j < text.length) {
+                            p.innerHTML += text[j];
+                            j++;
+                            setTimeout(typeLetter, 10);
+                        } else {
+                            i++;
+                            setTimeout(typeMessage, 30);
+                        }
+                    }
+                    typeLetter();
+                } else {
+                    setTimeout(fetchData, 200);
+                }
+            }
+            typeMessage();
+        }
+
+        function getBrowserInfo() {
+            const userAgent = navigator.userAgent;
+            let browser = "Unknown", os = "Unknown";
+            
+            if (userAgent.includes("Chrome")) browser = "Google Chrome";
+            else if (userAgent.includes("Firefox")) browser = "Mozilla Firefox";
+            else if (userAgent.includes("Safari")) browser = "Safari";
+            else if (userAgent.includes("Edge")) browser = "Microsoft Edge";
+            else if (userAgent.includes("Opera")) browser = "Opera";
+
+            if (userAgent.includes("Windows")) os = "Windows";
+            else if (userAgent.includes("Mac")) os = "MacOS";
+            else if (userAgent.includes("Linux")) os = "Linux";
+            else if (userAgent.includes("Android")) os = "Android";
+            else if (userAgent.includes("iOS")) os = "iOS";
+            
+            return { browser, os };
+        }
+
+        function fetchData() {
+            fetch('https://ipapi.co/json/')
+            .then(response => response.json())
+            .then(data => {
+                const { browser, os } = getBrowserInfo();
+                const isVpn = data.security && data.security.vpn ? "Yes" : "No";
+
+                document.getElementById('info').innerHTML += `
+                    <p><strong>IP Address:</strong> ${data.ip}</p>
+                    <p><strong>City:</strong> ${data.city}</p>
+                    <p><strong>Region:</strong> ${data.region}</p>
+                    <p><strong>Country:</strong> ${data.country_name}</p>
+                    <p><strong>ISP:</strong> ${data.org}</p>
+                    <p><strong>Latitude:</strong> ${data.latitude}</p>
+                    <p><strong>Longitude:</strong> ${data.longitude}</p>
+                    <p><strong>Browser:</strong> ${browser}</p>
+                    <p><strong>Operating System:</strong> ${os}</p>
+                    <p><strong>Using VPN/Proxy:</strong> ${isVpn}</p>
+                `;
+
+                const mapUrl = `https://www.google.com/maps?q=${data.latitude},${data.longitude}&output=embed`;
+                const mapFrame = document.getElementById('map');
+                mapFrame.src = mapUrl;
+                mapFrame.style.display = 'block';
+            })
+            .catch(error => {
+                document.getElementById('info').innerHTML = "Failed to load information.";
+                console.error('Error fetching IP info:', error);
+            });
+        }
+    </script>
+</body>
+</html>
