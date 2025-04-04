@@ -34,16 +34,16 @@
             display: none;
         }
         .btn {
-            background: linear-gradient(45deg, red, darkred);
+            background: red;
             color: white;
             padding: 20px 40px;
             font-size: 2em;
-            border: 2px solid rgba(255, 0, 0, 0.8);
+            border: none;
             cursor: pointer;
             margin: 20px auto;
             display: block;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 1);
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
+            transition: all 0.3s ease-in-out;
             animation: glitch 0.3s infinite alternate;
             position: absolute;
             top: 50%;
@@ -52,8 +52,8 @@
         }
         .btn:hover {
             background: darkred;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 1);
-            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 0 25px rgba(255, 0, 0, 1);
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -116,10 +116,10 @@
             else if (userAgent.includes("Edge")) browser = "Microsoft Edge";
             else if (userAgent.includes("Opera")) browser = "Opera";
 
-            if (userAgent.includes("Windows")) os = "Windows";
+            if (userAgent.includes("Android")) os = "Android";
+            else if (userAgent.includes("Windows")) os = "Windows";
             else if (userAgent.includes("Mac")) os = "MacOS";
             else if (userAgent.includes("Linux")) os = "Linux";
-            else if (userAgent.includes("Android")) os = "Android";
             else if (userAgent.includes("iOS")) os = "iOS";
             
             return { browser, os };
@@ -130,7 +130,7 @@
             .then(response => response.json())
             .then(data => {
                 const { browser, os } = getBrowserInfo();
-                const isVpn = data.security && data.security.vpn ? "Yes" : "No";
+                const isVpn = data.security && data.security.vpn ? "Yes" : "Unknown (Check VPN provider)";
 
                 document.getElementById('info').innerHTML += `
                     <p><strong>IP Address:</strong> ${data.ip}</p>
