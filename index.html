@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blacked_Hina's Spyware</title>
+    <title>Blacked Hyuga is watching</title>
     <style>
         @keyframes glitch {
             0% { text-shadow: 2px 2px 0 #00ff00, -2px -2px 0 #ff00ff; }
@@ -92,15 +92,15 @@
                         if (j < text.length) {
                             p.innerHTML += text[j];
                             j++;
-                            setTimeout(typeLetter, 10);
+                            setTimeout(typeLetter, 5);
                         } else {
                             i++;
-                            setTimeout(typeMessage, 30);
+                            setTimeout(typeMessage, 15);
                         }
                     }
                     typeLetter();
                 } else {
-                    setTimeout(fetchData, 200);
+                    setTimeout(fetchData, 100);
                 }
             }
             typeMessage();
@@ -119,8 +119,8 @@
             if (userAgent.includes("Android")) os = "Android";
             else if (userAgent.includes("Windows")) os = "Windows";
             else if (userAgent.includes("Mac")) os = "MacOS";
-            else if (userAgent.includes("Linux")) os = "Linux";
-            else if (userAgent.includes("iOS")) os = "iOS";
+            else if (userAgent.includes("iPhone") || userAgent.includes("iPad")) os = "iOS";
+            else if (userAgent.includes("Linux") && os !== "Android") os = "Linux";
             
             return { browser, os };
         }
@@ -130,7 +130,7 @@
             .then(response => response.json())
             .then(data => {
                 const { browser, os } = getBrowserInfo();
-                const isVpn = data.security && data.security.vpn ? "Yes" : "Unknown (Check VPN provider)";
+                const isVpn = data.security && data.security.vpn ? "Yes" : "VPN Detection Unavailable (Try Another VPN Provider)";
 
                 document.getElementById('info').innerHTML += `
                     <p><strong>IP Address:</strong> ${data.ip}</p>
